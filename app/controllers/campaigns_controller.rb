@@ -134,9 +134,7 @@ class CampaignsController < ApplicationController
 			redirect_to(:controller => 'campaigns', :action => 'list')
 		end
 
-		victim_id_to_destroy = victim.id
-
-		victim.destroy
+    victim.destroy
 		flash[:notice] = "Deleted #{victim.email_address}"
 		respond_to do |format|
 			format.html { redirect_to(:controller => 'campaigns', :action => 'victims', :id => victim.campaign_id) }

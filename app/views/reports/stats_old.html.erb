@@ -40,7 +40,7 @@
 		data.addColumn('number', 'Count');
 		data.addRows([
 			['User Clicked', <%= @apache_data[:visitors].length %>],
-			['No Action', <%= @email_settings.emails_sent %> - <%= @apache_data[:visitors].length %> ],
+			['No Action', <%= @email_settings.emails_sent %> - <%= @apache_data[:visitors].length %> ]
 		]);
 
 		// Set chart options

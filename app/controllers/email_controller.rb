@@ -15,7 +15,7 @@ class EmailController < ApplicationController
       begin
         PhishingFrenzyMailer.delay.phish(@campaign.id, @campaign.test_victim.email_address, @blast.id, PREVIEW)
         flash[:notice] = "Campaign test email queued for preview"
-      rescue Redis::CannotConnectError => e
+      rescue Redis::CannotConnectError => _
         flash[:error] = "Sidekiq cannot connect to Redis. Emails were not queued."
       end
     else
@@ -32,7 +32,7 @@ class EmailController < ApplicationController
       begin
         PhishingFrenzyMailer.delay.phish(@campaign.id, @campaign.test_victim.email_address, @blast.id, ACTIVE)
         flash[:notice] = "Campaign test email queued for test"
-      rescue Redis::CannotConnectError => e
+      rescue Redis::CannotConnectError => _
         flash[:error] = "Sidekiq cannot connect to Redis. Emails were not queued."
       end
     else
@@ -56,7 +56,7 @@ class EmailController < ApplicationController
         @campaign.email_sent = true
         @campaign.save
         flash[:notice] = "Campaign blast launched"
-      rescue Redis::CannotConnectError => e
+      rescue Redis::CannotConnectError => _
         flash[:error] = "Sidekiq cannot connect to Redis. Emails were not queued."
       end
     else

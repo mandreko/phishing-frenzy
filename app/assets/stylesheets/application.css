@@ -41,32 +41,8 @@ A:hover
 {
   padding-bottom: 30px;
 }
-#logout
-{
-  float: right;
-  padding: 2px;
-}
-/*CRUD*/
-.odd
-{
-  background: #E5E5E4;
-}
-.even
-{
-  background: none;
-}
-.notice, .alert
-{
-  text-align: center;
-  background: #A41400;
-  color: #FFFFFF;
-  max-height: 5px;
-  margin-top: 5px;
-}
 
-#flash-notice {
-  line-height: 5px;
-}
+/*CRUD*/
 
 .back-link
 {
@@ -81,20 +57,8 @@ A:hover
 }
 
 /* Wrapper for page content to push down footer */
-#wrap {
-  min-height: 100%;
-  height: auto !important;
-  height: 100%;
-  /* Negative indent footer by it's height */
-  margin: 0 auto -60px;
-}
 
 /* Set the fixed height of the footer here */
-#push,
-#footer {
-  height: 30px;
-  padding-top: 5px;
-}
 #footer {
   background-color: #ca0002;
 }

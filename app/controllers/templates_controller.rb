@@ -157,7 +157,6 @@ class TemplatesController < ApplicationController
 			}
 		}
 
-		filenames = Dir.glob(File.join(template_location, '*')).map{|filepath| File.basename(filepath)}
 		attachments.each do |attachment|
 			# add each attachment to template
 			filename = File.basename(attachment.file.to_s)
@@ -203,7 +202,6 @@ private
 		template.attachments.each do |a|
 			#new_template.attachments << a.dup
 			# add each attachment to template
-			filename = File.basename(a.file.to_s)
 			t = new_template.attachments.new(function: a.function)
 			t.file = a.file
 			t.save!		

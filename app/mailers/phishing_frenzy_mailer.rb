@@ -6,7 +6,6 @@ class PhishingFrenzyMailer < ActionMailer::Base
     @campaign = Campaign.find(campaign_id)
     @display_from = @campaign.email_settings.display_from
     @date = Time.now.to_formatted_s(:long_ordinal)
-    track = @campaign.campaign_settings.track_uniq_visitors?
     phishing_url = @campaign.email_settings.phishing_url
     target.class == String ? @target = Victim.new(email_address: target) : @target = target
     blast = @campaign.blasts.find(blast_id)
@@ -19,7 +18,7 @@ class PhishingFrenzyMailer < ActionMailer::Base
       if Victim.where(:email_address => @target.email_address, :campaign_id => campaign_id).empty?
         uid = "000000"
       else
-        uid = Victim.where(:email_address => @target.email_address, :campaign_id => campaign_id).first().uid
+        uid = Victim.where(:email_address => @target.email_address, :campaign_id => campaign_id).first.uid
       end
       @url =  "#{phishing_url}?uid=#{uid}"
       @image_url = PhishingFramework::SITE_URL + "/reports/image/#{uid}.png"
@@ -43,7 +42,7 @@ class PhishingFrenzyMailer < ActionMailer::Base
       if Victim.where(:email_address => @target.email_address, :campaign_id => campaign_id).empty?
         uid = "000000"
       else
-        uid = Victim.where(:email_address => @target.email_address, :campaign_id => campaign_id).first().uid
+        uid = Victim.where(:email_address => @target.email_address, :campaign_id => campaign_id).first.uid
       end
       bait = mail(
           to: @target.email_address,

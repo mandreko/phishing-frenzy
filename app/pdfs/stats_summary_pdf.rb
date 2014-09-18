@@ -10,22 +10,20 @@ class StatsSummaryPdf < Prawn::Document
     @victims_no_action = Array.new
 
     @campaign.victims.each do |victim|
-      if !victim.opened?
+      unless victim.opened?
         @victims_no_action << victim
       end
     end
 
     @campaign.victims.each do |victim|
-      if victim.opened?
-        @victims_responded << victim
-      end
+      @victims_responded << victim if victim.opened?
     end
 
     header
     campaign_overview
     stats_summary
-    victims_responded if !@victims_responded.empty?
-    victims_no_action if !@victims_no_action.empty?
+    victims_responded unless @victims_responded.empty?
+    victims_no_action unless @victims_no_action.empty?
   end
 
   # add header to PDF

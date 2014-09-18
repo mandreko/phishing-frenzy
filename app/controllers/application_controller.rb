@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
       if q > 0 and !@sidekiq
         flash[:warning] = "You have #{ActionController::Base.helpers.pluralize(q, 'job')} enqueued, but sidekiq is not running"
       end
-    rescue Redis::CannotConnectError => e
+    rescue Redis::CannotConnectError => _
       @redis = false
     end
   end

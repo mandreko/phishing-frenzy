@@ -27,7 +27,7 @@ class ReportsController < ApplicationController
     visit.browser = request.env["HTTP_USER_AGENT"]
     visit.ip_address = request.env["REMOTE_ADDR"]
     visit.extra = "SOURCE: EMAIL"
-    visit.save()
+    visit.save
     send_file File.join(Rails.root.to_s, "public", "tracking_pixel.png"), :type => 'image/png', :disposition => 'inline'
   end
 
@@ -52,8 +52,8 @@ class ReportsController < ApplicationController
       finish += "length " + victims.length.to_s + ", "
       if victims.length > 0
         finish += "over 1, "
-        v = victims.first()
-        visit = Visit.new()
+        v = victims.first
+        visit = Visit.new
         visit.victim_id = v.id
         if params[:browser_info]
           finish += "browser info, "
@@ -67,7 +67,7 @@ class ReportsController < ApplicationController
           finish += "extra, "
           visit.extra = params[:extra]
         end
-        visit.save()
+        visit.save
       end
     end
 
@@ -97,40 +97,40 @@ class ReportsController < ApplicationController
 
     Victim.where(campaign_id: params[:id]).each do |victim|
       s = Visit.where(:victim_id => victim.id).where('extra is null OR extra not LIKE ?', "%EMAIL%").size
-      if (s > 0)
+      if s > 0
         @uvic = @uvic + 1
         @visits = @visits + s
       end
       @opened = Campaign.opened(@campaign)
     end
 
-    @jsonToSend = Hash.new()
-    @jsonToSend["campaign_name"] = @campaign.name
-    @jsonToSend["time"] = @time
-    @jsonToSend["active"] = @campaign.active
-    @jsonToSend["template"] = @template_name
-    @jsonToSend["sent"] = @emails_sent
-    @jsonToSend["opened"] = @opened
-    @jsonToSend["clicked"] = @uvic
+    @json_to_send = Hash.new
+    @json_to_send["campaign_name"] = @campaign.name
+    @json_to_send["time"] = @time
+    @json_to_send["active"] = @campaign.active
+    @json_to_send["template"] = @template_name
+    @json_to_send["sent"] = @emails_sent
+    @json_to_send["opened"] = @opened
+    @json_to_send["clicked"] = @uvic
 
-    render json: @jsonToSend
+    render json: @json_to_send
   end
 
   def victims_list 
-    jsonToSend = Hash.new()
-    jsonToSend["aaData"] = Array.new(Victim.where(campaign_id: params[:id]).count)
+    json_to_send = Hash.new
+    json_to_send["aaData"] = Array.new(Victim.where(campaign_id: params[:id]).count)
     i = 0
     Victim.where(campaign_id: params[:id]).each do |victim|
-      passwordSeen = Visit.where(:victim_id => victim.id).where('extra LIKE ?', "%password%").count > 0 ? "Yes" : "No"
-      imageSeen = Visit.where(:victim_id => victim.id).count > 0 ? "Yes" : "No"
-      emailSent = victim.sent ? "Yes" : "No"
-      emailClicked =  Visit.where(:victim_id => victim.id).where(:extra => nil).count + Visit.where(:victim_id => victim.id).where('extra not LIKE ?', "%EMAIL%").count > 0 ? "Yes" : "No"
-      emailSeen = Visit.where(:victim_id => victim.id).last() != nil ? Visit.where(:victim_id => victim.id).last().created_at : "N/A"
-      jsonToSend["aaData"][i] = [victim.uid,victim.email_address,emailSent,imageSeen,emailClicked,passwordSeen,emailSeen]
+      password_seen = Visit.where(:victim_id => victim.id).where('extra LIKE ?', "%password%").count > 0 ? "Yes" : "No"
+      image_seen = Visit.where(:victim_id => victim.id).count > 0 ? "Yes" : "No"
+      email_sent = victim.sent ? "Yes" : "No"
+      email_clicked =  Visit.where(:victim_id => victim.id).where(:extra => nil).count + Visit.where(:victim_id => victim.id).where('extra not LIKE ?', "%EMAIL%").count > 0 ? "Yes" : "No"
+      email_seen = Visit.where(:victim_id => victim.id).last != nil ? Visit.where(:victim_id => victim.id).last.created_at : "N/A"
+      json_to_send["aaData"][i] = [victim.uid,victim.email_address,email_sent,image_seen,email_clicked,password_seen,email_seen]
       i += 1
     end
 
-    render json: jsonToSend
+    render json: json_to_send
   end
 
   def uid
@@ -138,15 +138,15 @@ class ReportsController < ApplicationController
   end
 
   def uid_json
-    jsonToSend = Hash.new()
-    jsonToSend["aaData"] = Array.new(Visit.where(victim_id: Victim.where(uid: params[:id]).first.id))
+    json_to_send = Hash.new
+    json_to_send["aaData"] = Array.new(Visit.where(victim_id: Victim.where(uid: params[:id]).first.id))
     i = 0
     Visit.where(victim_id: Victim.where(uid: params[:id]).first.id).each do |visit|
-      jsonToSend["aaData"][i] = [visit.id,visit.browser,visit.ip_address,visit.created_at,visit.extra]
+      json_to_send["aaData"][i] = [visit.id,visit.browser,visit.ip_address,visit.created_at,visit.extra]
       i += 1
     end
 
-    render json: jsonToSend
+    render json: json_to_send
   end
 
   def download_stats
@@ -181,10 +181,7 @@ class ReportsController < ApplicationController
     end
 
     wb.add_worksheet(name: "Targets") do |sheet|
-      sheet.add_row [
-        "Target",
-        "Clicked?",
-        "Opened?"], style: @heading
+      sheet.add_row %w(Target Clicked? Opened?), style: @heading
       @victims.each do |victim|
         sheet.add_row [
           victim.email_address, 

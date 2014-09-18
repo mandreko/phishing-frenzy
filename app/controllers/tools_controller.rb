@@ -60,10 +60,10 @@ class ToolsController < ApplicationController
 
     # bing search to list first 50 urls and place in array
     bing_web = Bing.new(bing_api, 50, "Web")
-    number.times.each do |search|
+    number.times.each do |_|
       begin
         bing_results = bing_web.search("\@#{params[:domain]}", offset)
-      rescue => e
+      rescue => _
         redirect_to tools_emails_path, notice: 'Invalid Bing API Key'
         return
       end
@@ -75,7 +75,6 @@ class ToolsController < ApplicationController
     urls.uniq!
 
     # iterate through links and store unique emails to database
-    found_emails = []
     contents = ""
 
     # create new search record

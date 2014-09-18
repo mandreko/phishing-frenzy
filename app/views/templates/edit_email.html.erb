@@ -8,7 +8,7 @@
 
 <div class='row'>
 	<div class='col-md-12'>
-		<%= form_for(:attachment, :url => {:action => 'update_attachment', :format => params[:format]}) do |f| %>
+		<%= form_for(:attachment, :url => {:action => 'update_attachment', :format => params[:format]}) do |_| %>
 			<div class="form-buttons">
 				<%= submit_tag("Save", class: 'btn btn-primary') %>
 			</div>

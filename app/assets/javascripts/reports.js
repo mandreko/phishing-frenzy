@@ -13,7 +13,7 @@ $( document ).ready(function() {
     "aoColumnDefs": [            
     {
      "aTargets": [ 0 ], // Column to target
-     "mRender": function ( data, type, full ) {
+     "mRender": function ( data ) {
         // 'full' is the row's data object, and 'data' is this column's data
         // e.g. 'full[0]' is the comic id, and 'data' is the comic title
         return '<a href="/reports/uid/' + data + '">' + data + '</a>';

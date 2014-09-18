@@ -20,11 +20,11 @@ class Admin < ActiveRecord::Base
 	end
 
 	def inactive_message
-		if !approved?
-			:not_approved
-		else
-			super # Use whatever other message
-		end
+    if approved?
+      super # Use whatever other message
+    else
+      :not_approved
+    end
 	end
 
 end

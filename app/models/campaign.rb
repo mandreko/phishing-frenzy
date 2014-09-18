@@ -79,7 +79,7 @@ class Campaign < ActiveRecord::Base
   private
 
   def parse_email_addresses
-    if not self.emails.blank?
+    unless self.emails.blank?
       entry = self.emails.split("\r\n")[0]
       if entry.scan(/,/).count == 0
         # email
@@ -91,7 +91,7 @@ class Campaign < ActiveRecord::Base
         # firstname, lastname, email
         parse_triple_csv
       end
-      
+
       # clear the Campaigns.emails holder
       self.update_attribute(:emails, " ")
     end
@@ -158,7 +158,7 @@ class Campaign < ActiveRecord::Base
         File.open(httpd, "a+") do |f|
           template = Template.find_by_id(campaign.template_id)
           if template.nil?
-            raise 'Template #{campaign.template_id} not found'
+            raise "Template #{campaign.template_id} not found"
           else
             f.write(vhost_text(campaign))
           end
@@ -211,13 +211,13 @@ class Campaign < ActiveRecord::Base
 
   def tag_beef(tags)
     beef = ERB.new File.read(File.join(Rails.root, "app/views/reports/beef.txt.erb"))
-    return beef.result(self.beef_binding(select_beef_url)) + tags.result
+    beef.result(self.beef_binding(select_beef_url)) + tags.result
   end
 
   def select_beef_url
     return campaign_settings.beef_url unless campaign_settings.beef_url.empty?
     return GlobalSettings.first.beef_url unless GlobalSettings.first.beef_url.empty?
-    return "#{PhishingFramework::SITE_URL}:3000/hook.js"
+    "#{PhishingFramework::SITE_URL}:3000/hook.js"
   end
 
   def deployment_directory
